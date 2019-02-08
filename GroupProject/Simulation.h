@@ -33,9 +33,19 @@ private:
 	int startingAnts;	// Initial ants on board
 	int startingBugs;	// Initial bugs on board
 
-	Critter*** board;
-	void makeMoves(Critter::Type type);
-	void doBreedAndStarve();
+	Critter*** board;	// The place where the critters live
+
+	// All critters of (type) execute their Move method
+	// Returns number of (type)
+	int makeMoves(Critter::Type type);
+
+	// All critters of (type) execute their Breed method
+	// Returns number of new (type)
+	int breed(Critter::Type type);
+	
+	// All Doodlebugs starve if they haven't eaten
+	// Return number of doodlebugs starved
+	int starve();
 
 	void resetMoved();
 

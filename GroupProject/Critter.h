@@ -39,7 +39,7 @@ public:
 	bool hasMoved() { return moved; }
 	virtual Type GetType() = 0;
 	virtual void Move(Critter*** &board) = 0;
-	virtual void Breed(Critter*** &board) = 0;
+	virtual bool Breed(Critter*** &board) = 0;
 	virtual bool Starve() { return false; }
 	virtual ~Critter() {}
 };

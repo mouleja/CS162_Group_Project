@@ -22,7 +22,7 @@ public:
 
 	// Functions
 	void Move(Critter*** &board);
-	void Breed(Critter*** &board);
+	bool Breed(Critter*** &board);
 	Type GetType();
 };
 

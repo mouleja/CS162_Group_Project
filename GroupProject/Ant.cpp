@@ -84,8 +84,9 @@ void Ant::Move(Critter*** &board)
 	this->age += 1;
 }
 
-void Ant::Breed(Critter*** &board)
+bool Ant::Breed(Critter*** &board)
 {
+	return false;
 }
 
 Critter::Type Ant::GetType()

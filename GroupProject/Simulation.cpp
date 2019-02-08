@@ -7,6 +7,10 @@
 **	Ants(prey) and Doodlebugs(predators) move, breed and starve in a 2D grid
 ******************************************************************************/
 
+#include <ctime>
+#include <cstdlib>
+#include <iostream>
+
 #include "Simulation.h"
 #include "iohelper.h"
 
@@ -55,6 +59,9 @@ Simulation::~Simulation()
 void Simulation::Run()
 {
 	printString("\nWelcome to the Predator-Prey Simulation Program by <NAMES>!\n");
+
+	int ants = 0;
+	int bugs = 0;
 
 	// Populate board with predefined board for now (REPLACE WITH RANDOM)
 	vector< vector<int> > sampleBoard {
@@ -110,10 +117,12 @@ void Simulation::Run()
 			if (sampleBoard[r][c] == 1)
 			{
 				board[r][c] = new Ant(r, c, rows, cols);
+				ants++;
 			}
 			else if (sampleBoard[r][c] == 2)
 			{
 				board[r][c] = new Doodlebug(r, c, rows, cols);
+				bugs++;
 			}
 			else
 			{
@@ -125,21 +134,32 @@ void Simulation::Run()
 	bool endSimulation = false;
 	int currentTurn = 0, turns = 0;
 
+		printBoard();		// print board to console
+		std::cout << "Starting Board: Ants - " << ants << ", Doodlebugs- " << bugs << std::endl;
+
 	while (!endSimulation)
 	{
-		turns += getInt("How many turns do you want to simulate?:");
+		turns += getInt("\nHow many turns do you want to simulate?:");
 
 		while (currentTurn < turns)
 		{
+			printString();
+
 			// go thru board and do actions
 			// doodlebugs moved first
-			makeMoves(Critter::Type::Doodlebug);
-			makeMoves(Critter::Type::Ant);
+			bugs = makeMoves(Critter::Type::Doodlebug);
+			ants = makeMoves(Critter::Type::Ant);
 			resetMoved();		// reset moved bool for next turn
-			doBreedAndStarve();	// do breed and starve actions for all critters
+
+			bugs += breed(Critter::Type::Doodlebug);
+			ants += breed(Critter::Type::Ant);
+
+			bugs -= starve();
+
 			printBoard();		// print board to console
 			currentTurn++;
-			printString("Turn: " + std::to_string(currentTurn));
+			std::cout<< "Turn: " << currentTurn << ", Ants - " 
+				<< ants << ", Doodlebugs - " << bugs << std::endl;
 		}
 
 		char doMoreTurns[] = { 'y', 'n' };
@@ -152,8 +172,9 @@ void Simulation::Run()
 	printString("\nThanks for running our simulation!");
 }
 
-void Simulation::makeMoves(Critter::Type type)
+int Simulation::makeMoves(Critter::Type type)
 {
+	int total = 0;
 	for (int r = 0; r < rows; r++)
 	{
 		for (int c = 0; c < cols; c++)
@@ -164,31 +185,53 @@ void Simulation::makeMoves(Critter::Type type)
 				board[r][c]->hasMoved() == false)
 			{
 				board[r][c]->Move(board);	// Move should update moved bool
+				++total;
 			}
 		}
 	}
+	return total;
 }
 
-void Simulation::doBreedAndStarve()
+int Simulation::breed(Critter::Type type)
 {
+	int total = 0;
 	for (int r = 0; r < rows; r++)
 	{
 		for (int c = 0; c < cols; c++)
 		{
-			if (board[r][c]) 
+			if (board[r][c] && board[r][c]->GetType() == type)
 			{
-				board[r][c]->Breed(board);
-				if (board[r][c]->GetType() == Critter::Type::Doodlebug)
+				if (board[r][c]->Breed(board))
 				{
-					if (board[r][c]->Starve())
-					{
-						delete board[r][c];
-						board[r][c] = nullptr;
-					}//end if starve
-				}//end if doodlebug
+					++total;
+				}
 			}
 		}
 	}
+	return total;
+}
+
+int Simulation::starve()
+{
+	int total = 0;
+	for (int r = 0; r < rows; r++)
+	{
+		for (int c = 0; c < cols; c++)
+		{
+			if (board[r][c] && board[r][c]->GetType() == Critter::Type::Doodlebug)
+			{
+				if (board[r][c]->Starve())
+				{
+					delete board[r][c];
+					board[r][c] = nullptr;
+					printString("Doodlebug starves at " + std::to_string(r) + " : " +
+						std::to_string(c));
+					++total;
+				}//end if starve
+			}
+		}
+	}
+	return total;
 }
 
 void Simulation::resetMoved()
@@ -250,6 +293,8 @@ void Simulation::printBoard()
 
 int main()
 {
+	srand(static_cast<unsigned int>(time(NULL)));	// Seed Rand()
+
 	Simulation* simulation = new Simulation();
 	simulation->Run();
 	delete simulation;
