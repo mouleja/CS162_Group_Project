@@ -86,8 +86,55 @@ void Ant::Move(Critter*** &board)
 
 bool Ant::Breed(Critter*** &board)
 {
-	return false;
+    bool canBreed = false;
+    bool breed = false;
+    //if age = 3 or multiple of 3, set bool to true
+    if ((age % 3) == 0) {
+        canBreed = true;
+    } else canBreed = false;
+    
+    if (canBreed == true) {
+        // Get random number for moving up, down, left, or right
+        // UP = 0, DOWN, = 1, LEFT = 2, RIGHT = 3
+        int randDir = getRandInt(0, 3);
+        
+        // Check if a random spot is empty
+        if (randDir == 0) {
+            if (row - 1 >= 0) {
+                if (board[row - 1][col] == nullptr) {
+                    board[row - 1][col] = new Ant (row - 1, col, rowSize, colSize);
+                    breed = true;
+                }
+            }
+        }
+        else if (randDir == 1) {
+            if (row + 1 <= rowSize - 1) {
+                if (board[row + 1][col] == nullptr) {
+                    board[row + 1][col] = new Ant (row + 1, col, rowSize, colSize);
+                    breed = true;
+                }
+            }
+        }
+        else if (randDir == 2) {
+            if (col - 1 >= 0) {
+                if (board[row][col - 1] == nullptr) {
+                    board[row][col - 1] = new Ant (row, col - 1, rowSize, colSize);
+                    breed = true;
+                }
+            }
+        }
+        else if (randDir == 3){
+            if (col + 1 <= colSize - 1) {
+                if (board[row][col + 1] == nullptr) {
+                    board[row][col + 1] = new Ant (row, col + 1, rowSize, colSize);
+                    breed = true;
+                }
+            }
+        }
+    }
+    return breed;
 }
+
 
 Critter::Type Ant::GetType()
 {
