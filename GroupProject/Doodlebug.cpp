@@ -1,6 +1,10 @@
 #include "Doodlebug.h"
 #include <cstdlib>
-#include <ctime>
+//#include <ctime>
+#include <iostream> //for de'Bug'ging like jason said
+
+using std::cout;
+using std::endl;
 
 Doodlebug::Doodlebug(int row, int col, int rowSize, int colSize) : Critter(row, col, rowSize, colSize)
 {
@@ -107,11 +111,12 @@ void Doodlebug::Move(Critter*** &board)
 	//if there are ants to in adjacent spaces to be eaten
 	if (numAnts)
 	{
-		srand(time(NULL));
+		//srand(time(NULL));
 		randNum = rand() % numAnts; //get a random neighboring ant
 		nextRow = ants[randNum][0]; //get the ant's row coordinate
 		nextCol = ants[randNum][1]; //get the ant's col coordinate
 		delete board[nextRow][nextCol]; //'eat' the ant
+		cout << "Ant has been devoured at " << nextRow << " : " << nextCol << endl;
 		board[row][col] = nullptr;// leave current space empty
 		row = nextRow; //update row
 		col = nextCol; //update col
@@ -121,7 +126,7 @@ void Doodlebug::Move(Critter*** &board)
 	//if there aren't any ants but there are empty adjacent spaces to move into
 	else if(numSpaces)
 	{
-		srand(time(NULL));
+		//srand(time(NULL));
 		randNum = rand() % numSpaces; //randomly get an adjacent empty space
 		nextRow = validSpaces[randNum][0]; //get row coordinate of empty space
 		nextCol = validSpaces[randNum][1]; //get col coordinate of empty space
@@ -155,13 +160,14 @@ void Doodlebug::Move(Critter*** &board)
 
 }//end move
 
-void Doodlebug::Breed(Critter*** &board)
+bool Doodlebug::Breed(Critter*** &board)
 {
 	int** validSpaces = new int*[4];
 	int numSpaces = 0; //number of adjacent empty spaces
 	int spawnRow;
 	int spawnCol;
 	int randNum;
+	bool bred = false;
 
 	//looks into the spaces above, to the right, below and to the left of the doodlebug
 	//and assesses whether there are available spaces to reproduce in.
@@ -222,12 +228,14 @@ void Doodlebug::Breed(Critter*** &board)
 		//if there are empty adjacent spaces to spawn
 		if (numSpaces)
 		{
-			srand(time(NULL));
+			//srand(time(NULL));
 			randNum = rand() % numSpaces; //randomly get an adjacent empty space
 			spawnRow = validSpaces[randNum][0]; //get row coordinate of empty space
 			spawnCol = validSpaces[randNum][1]; //get col coordinate of empty space
 			board[spawnRow][spawnCol] = new Doodlebug(spawnRow, spawnCol, 20, 20);
+			cout << "Doodlebug spawned at " << spawnRow << " : " << spawnCol << endl;
 			age = 0;
+			bred = true;
 		}
 	}//end if of breeding age
 
@@ -237,6 +245,8 @@ void Doodlebug::Breed(Critter*** &board)
 		delete validSpaces[i];
 	}
 	delete[] validSpaces;
+
+	return bred;
 
 }//end breed
 
