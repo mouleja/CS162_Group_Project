@@ -1,14 +1,11 @@
 #include "Doodlebug.h"
 #include <cstdlib>
 //#include <ctime>
-#include <iostream> //for de'Bug'ging like jason said
-
-using std::cout;
-using std::endl;
+#include <iostream>	// FOR DE'BUG'GING (Get it?)
 
 Doodlebug::Doodlebug(int row, int col, int rowSize, int colSize) : Critter(row, col, rowSize, colSize)
 {
-	fed = 4;
+	fed = 3;
 }
 
 Doodlebug::~Doodlebug()
@@ -116,11 +113,11 @@ void Doodlebug::Move(Critter*** &board)
 		nextRow = ants[randNum][0]; //get the ant's row coordinate
 		nextCol = ants[randNum][1]; //get the ant's col coordinate
 		delete board[nextRow][nextCol]; //'eat' the ant
-		cout << "Ant has been devoured at " << nextRow << " : " << nextCol << endl;
 		board[row][col] = nullptr;// leave current space empty
 		row = nextRow; //update row
 		col = nextCol; //update col
 		board[row][col] = this; //move to space ant occuppied.
+		std::cout << "Doodlebug eats ant at " << row << " : " << col << std::endl; // DEBUG
 		fed = 3; //update fed status of doodlebug
 	}
 	//if there aren't any ants but there are empty adjacent spaces to move into
@@ -162,93 +159,54 @@ void Doodlebug::Move(Critter*** &board)
 
 bool Doodlebug::Breed(Critter*** &board)
 {
-	int** validSpaces = new int*[4];
-	int numSpaces = 0; //number of adjacent empty spaces
-	int spawnRow;
-	int spawnCol;
-	int randNum;
-	bool bred = false;
-
-	//looks into the spaces above, to the right, below and to the left of the doodlebug
-	//and assesses whether there are available spaces to reproduce in.
-
-	//if doodlebug is of breeding age
-	if (age >= 8)
-	{
-		if (validSpace(row - 1, col))
-		{
-			if (board[row - 1][col] == nullptr)
-			{
-				validSpaces[numSpaces] = new int[2];
-				validSpaces[numSpaces][0] = row - 1;
-				validSpaces[numSpaces][1] = col;
-				numSpaces++;
-
-			}
-		}
-		//check in the right direction second
-		if (validSpace(row, col + 1))
-		{
-			if (board[row][col + 1] == nullptr)
-			{
-				validSpaces[numSpaces] = new int[2];
-				validSpaces[numSpaces][0] = row;
-				validSpaces[numSpaces][1] = col + 1;
-				numSpaces++;
-
-			}
-		}//end right direction
-
-		//check in the downward direction
-		if (validSpace(row + 1, col))
-		{
-			if (board[row + 1][col] == nullptr)
-			{
-				validSpaces[numSpaces] = new int[2];
-				validSpaces[numSpaces][0] = row + 1;
-				validSpaces[numSpaces][1] = col;
-				numSpaces++;
-
-			}
-		}//end check down direction
-
-		//check in the left direction
-		if (validSpace(row, col - 1))
-		{
-			if (board[row][col - 1] == nullptr)
-			{
-				validSpaces[numSpaces] = new int[2];
-				validSpaces[numSpaces][0] = row;
-				validSpaces[numSpaces][1] = col - 1;
-				numSpaces++;
-
-			}
-		}//end left direction
-
-		//if there are empty adjacent spaces to spawn
-		if (numSpaces)
-		{
-			//srand(time(NULL));
-			randNum = rand() % numSpaces; //randomly get an adjacent empty space
-			spawnRow = validSpaces[randNum][0]; //get row coordinate of empty space
-			spawnCol = validSpaces[randNum][1]; //get col coordinate of empty space
-			board[spawnRow][spawnCol] = new Doodlebug(spawnRow, spawnCol, 20, 20);
-			cout << "Doodlebug spawned at " << spawnRow << " : " << spawnCol << endl;
-			age = 0;
-			bred = true;
-		}
-	}//end if of breeding age
-
-	//deallocate array
-	for (int i = 0; i < numSpaces; i++)
-	{
-		delete validSpaces[i];
-	}
-	delete[] validSpaces;
-
-	return bred;
-
-}//end breed
+    bool canBreed = false;
+    bool breed = false;
+    //if age = 8 or multiple of 8, set bool to true
+    if ((age % 8) == 0) {
+        canBreed = true;
+    } else canBreed = false;
+    
+    if (canBreed == true) {
+        // Get random number for moving up, down, left, or right
+        // UP = 0, DOWN, = 1, LEFT = 2, RIGHT = 3
+        int randDir = getRandInt(0, 3);
+        
+        // Check if a random spot is empty
+        if (randDir == 0) {
+            if (row - 1 >= 0) {
+                if (board[row - 1][col] == nullptr) {
+                    board[row - 1][col] = new Doodlebug (row - 1, col, rowSize, colSize);
+                    breed = true;
+                }
+            }
+        }
+        else if (randDir == 1) {
+            if (row + 1 <= rowSize - 1) {
+                if (board[row + 1][col] == nullptr) {
+                    board[row + 1][col] = new Doodlebug (row + 1, col, rowSize, colSize);
+                    breed = true;
+                }
+            }
+        }
+        else if (randDir == 2) {
+            if (col - 1 >= 0) {
+                if (board[row][col - 1] == nullptr) {
+                    board[row][col - 1] = new Doodlebug (row, col - 1, rowSize, colSize);
+                    breed = true;
+                }
+            }
+        }
+        else if (randDir == 3){
+            if (col + 1 <= colSize - 1) {
+                if (board[row][col + 1] == nullptr) {
+                    board[row][col + 1] = new Doodlebug (row, col + 1, rowSize, colSize);
+                    breed = true;
+                }
+            }
+        }
+    }
+    return breed;
+}
 
 bool Doodlebug::Starve()
 {
