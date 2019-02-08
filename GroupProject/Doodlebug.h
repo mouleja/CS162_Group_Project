@@ -12,7 +12,7 @@ public:
 	Doodlebug(int row, int col, int rowSize, int colSize);
 	~Doodlebug();
 	void Move(Critter*** &board);
-	bool Breed(Critter*** &board);
+	void Breed(Critter*** &board);
 	bool Starve();
 	Type GetType();
 	bool validSpace(int nextRow, int nextCol);
