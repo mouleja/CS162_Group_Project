@@ -4,7 +4,7 @@
 
 Doodlebug::Doodlebug(int row, int col, int rowSize, int colSize) : Critter(row, col, rowSize, colSize)
 {
-	fed = 3;
+	fed = 4;
 }
 
 Doodlebug::~Doodlebug()
@@ -157,7 +157,88 @@ void Doodlebug::Move(Critter*** &board)
 
 void Doodlebug::Breed(Critter*** &board)
 {
-}
+	int** validSpaces = new int*[4];
+	int numSpaces = 0; //number of adjacent empty spaces
+	int spawnRow;
+	int spawnCol;
+	int randNum;
+
+	//looks into the spaces above, to the right, below and to the left of the doodlebug
+	//and assesses whether there are available spaces to reproduce in.
+
+	//if doodlebug is of breeding age
+	if (age >= 8)
+	{
+		if (validSpace(row - 1, col))
+		{
+			if (board[row - 1][col] == nullptr)
+			{
+				validSpaces[numSpaces] = new int[2];
+				validSpaces[numSpaces][0] = row - 1;
+				validSpaces[numSpaces][1] = col;
+				numSpaces++;
+
+			}
+		}
+		//check in the right direction second
+		if (validSpace(row, col + 1))
+		{
+			if (board[row][col + 1] == nullptr)
+			{
+				validSpaces[numSpaces] = new int[2];
+				validSpaces[numSpaces][0] = row;
+				validSpaces[numSpaces][1] = col + 1;
+				numSpaces++;
+
+			}
+		}//end right direction
+
+		//check in the downward direction
+		if (validSpace(row + 1, col))
+		{
+			if (board[row + 1][col] == nullptr)
+			{
+				validSpaces[numSpaces] = new int[2];
+				validSpaces[numSpaces][0] = row + 1;
+				validSpaces[numSpaces][1] = col;
+				numSpaces++;
+
+			}
+		}//end check down direction
+
+		//check in the left direction
+		if (validSpace(row, col - 1))
+		{
+			if (board[row][col - 1] == nullptr)
+			{
+				validSpaces[numSpaces] = new int[2];
+				validSpaces[numSpaces][0] = row;
+				validSpaces[numSpaces][1] = col - 1;
+				numSpaces++;
+
+			}
+		}//end left direction
+
+		//if there are empty adjacent spaces to spawn
+		if (numSpaces)
+		{
+			srand(time(NULL));
+			randNum = rand() % numSpaces; //randomly get an adjacent empty space
+			spawnRow = validSpaces[randNum][0]; //get row coordinate of empty space
+			spawnCol = validSpaces[randNum][1]; //get col coordinate of empty space
+			board[spawnRow][spawnCol] = new Doodlebug(spawnRow, spawnCol, 20, 20);
+			age = 0;
+		}
+	}//end if of breeding age
+
+	//deallocate array
+	for (int i = 0; i < numSpaces; i++)
+	{
+		delete validSpaces[i];
+	}
+	delete[] validSpaces;
+
+}//end breed
 
 bool Doodlebug::Starve()
 {
