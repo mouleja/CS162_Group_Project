@@ -203,7 +203,15 @@ int Simulation::breed(Critter::Type type)
 			{
 				if (board[r][c]->Breed(board))
 				{
-					++total;
+                    if (board[r][c]->GetType() == Critter::Type::Doodlebug) {
+                        printString("Doodlebug breeds at " + std::to_string(r) + " : " +
+                                    std::to_string(c));
+                    } else if (board[r][c]->GetType() == Critter::Type::Ant) {
+                        printString("Ant breeds at " + std::to_string(r) + " : " +
+                                    std::to_string(c));
+                    }
+                    
+                    ++total;
 				}
 			}
 		}
