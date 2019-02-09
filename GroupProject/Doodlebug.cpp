@@ -1,11 +1,20 @@
-#include "Doodlebug.h"
+/******************************************************************************
+** Program name: Doodlebug.cpp
+** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Assignment: Group Project  -  CS162-400-W19
+** Date: 2/8/19
+** Description: Class representing simulated doodlebugs (Child of Critter)
+******************************************************************************/
+
 #include <cstdlib>
-//#include <ctime>
 #include <iostream>	// FOR DE'BUG'GING (Get it?)
+
+#include "Doodlebug.h"
+#include "randNum.hpp"
 
 Doodlebug::Doodlebug(int row, int col, int rowSize, int colSize) : Critter(row, col, rowSize, colSize)
 {
-	fed = 3;
+	fed = 3;	// Because fed gets decremented in Move which comes before starve
 }
 
 Doodlebug::~Doodlebug()
@@ -26,7 +35,7 @@ void Doodlebug::Move(Critter*** &board)
 
 	//looks into the spaces above, to the right, below and to the left of the doodlebug
 	//and assesses whether there are available spaces or ants.
-	//checck upwards direction first
+	//check upwards direction first
 	if (validSpace(row - 1, col))
 	{
 		if (board[row - 1][col] == nullptr)
@@ -118,7 +127,7 @@ void Doodlebug::Move(Critter*** &board)
 		col = nextCol; //update col
 		board[row][col] = this; //move to space ant occuppied.
 		std::cout << "Doodlebug eats ant at " << row << " : " << col << std::endl; // DEBUG
-		fed = 3; //update fed status of doodlebug
+		fed = 3; //update fed status of doodlebug 
 	}
 	//if there aren't any ants but there are empty adjacent spaces to move into
 	else if(numSpaces)
@@ -139,7 +148,7 @@ void Doodlebug::Move(Critter*** &board)
 		fed--;
 	}
 
-	age++;
+	lastBred++;
 	moved = true;
 
 	//deallocate array data:
@@ -157,54 +166,64 @@ void Doodlebug::Move(Critter*** &board)
 
 }//end move
 
+	// Doodlebugs can breed if they haven't bred in 8 turns and have an empty spot next to them
 bool Doodlebug::Breed(Critter*** &board)
 {
-    bool canBreed = false;
     bool breed = false;
-    //if age = 8 or multiple of 8, set bool to true
-    if ((age % 8) == 0) {
-        canBreed = true;
-    } else canBreed = false;
-    
-    if (canBreed == true) {
-        // Get random number for moving up, down, left, or right
-        // UP = 0, DOWN, = 1, LEFT = 2, RIGHT = 3
-        int randDir = getRandInt(0, 3);
+
+    if ( lastBred >= 8 && hasEmpty(row, col, board) ) {
         
-        // Check if a random spot is empty
-        if (randDir == 0) {
-            if (row - 1 >= 0) {
-                if (board[row - 1][col] == nullptr) {
-                    board[row - 1][col] = new Doodlebug (row - 1, col, rowSize, colSize);
-                    breed = true;
-                }
-            }
-        }
-        else if (randDir == 1) {
-            if (row + 1 <= rowSize - 1) {
-                if (board[row + 1][col] == nullptr) {
-                    board[row + 1][col] = new Doodlebug (row + 1, col, rowSize, colSize);
-                    breed = true;
-                }
-            }
-        }
-        else if (randDir == 2) {
-            if (col - 1 >= 0) {
-                if (board[row][col - 1] == nullptr) {
-                    board[row][col - 1] = new Doodlebug (row, col - 1, rowSize, colSize);
-                    breed = true;
-                }
-            }
-        }
-        else if (randDir == 3){
-            if (col + 1 <= colSize - 1) {
-                if (board[row][col + 1] == nullptr) {
-                    board[row][col + 1] = new Doodlebug (row, col + 1, rowSize, colSize);
-                    breed = true;
-                }
-            }
-        }
-    }
+		while (breed == false) {
+
+			// Get random number for moving up, down, left, or right
+			// UP = 0, DOWN, = 1, LEFT = 2, RIGHT = 3
+			int randDir = getRandInt(0, 3);
+
+			// Check if a random spot is empty
+			if (randDir == 0) {	// UP
+				if (row - 1 >= 0) {
+					if (board[row - 1][col] == nullptr) {
+						board[row - 1][col] = new Doodlebug(row - 1, col, rowSize, colSize);
+						breed = true;
+						std::cout << "New Doodlebug born at " << row - 1 << " : " << col << std::endl;
+					}
+				}
+			}
+			else if (randDir == 1) {	// DOWN
+				if (row + 1 <= rowSize - 1) {
+					if (board[row + 1][col] == nullptr) {
+						board[row + 1][col] = new Doodlebug(row + 1, col, rowSize, colSize);
+						breed = true;
+						std::cout << "New Doodlebug born at " << row + 1 << " : " << col << std::endl;
+					}
+				}
+			}
+			else if (randDir == 2) {	// LEFT
+				if (col - 1 >= 0) {
+					if (board[row][col - 1] == nullptr) {
+						board[row][col - 1] = new Doodlebug(row, col - 1, rowSize, colSize);
+						breed = true;
+						std::cout << "New Doodlebug born at " << row << " : " << col - 1 << std::endl;
+					}
+				}
+			}
+			else if (randDir == 3) {		// RIGHT
+				if (col + 1 <= colSize - 1) {
+					if (board[row][col + 1] == nullptr) {
+						board[row][col + 1] = new Doodlebug(row, col + 1, rowSize, colSize);
+						breed = true;
+						std::cout << "New Doodlebug born at " << row << " : " << col + 1 << std::endl;
+					}
+				}
+			}
+		}	// Keep trying until an empty spot is found
+    }	// If no adjacent squares empty, no breeding happens, will check again next turn
+
+	if (breed)
+	{
+		lastBred = 0;
+	}
+
     return breed;
 }
 
@@ -232,3 +251,12 @@ bool Doodlebug::validSpace(int nextRow, int nextCol)
 	}
 	return valid;
 }//end validSpace
+
+// Checks the four adjacent squares and returns true if one is empty
+bool Doodlebug::hasEmpty(int row, int col, Critter*** &board)
+{
+	return ((validSpace(row - 1, col) && board[row - 1][col] == nullptr)
+		|| (validSpace(row + 1, col) && board[row + 1][col] == nullptr)
+		|| (validSpace(row, col - 1) && board[row][col - 1] == nullptr)
+		|| (validSpace(row, col + 1) && board[row][col + 1] == nullptr));
+}

@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ant.cpp" />
+    <ClCompile Include="Critter.cpp" />
     <ClCompile Include="Doodlebug.cpp" />
     <ClCompile Include="iohelper.cpp" />
     <ClCompile Include="randNum.cpp" />

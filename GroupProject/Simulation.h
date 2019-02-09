@@ -1,10 +1,9 @@
 /******************************************************************************
 ** Program name: Simulation.hpp
-** Author: Group8 : 
+** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
 ** Assignment: Group Project  -  CS162-400-W19
 ** Date: 2/2/19
-** Description: 2D Predator-Prey simulation program
-**	Ants(prey) and Doodlebugs(predators) move, breed and starve in a 2D grid
+** Description: Parent Abstract class representing simulated insects
 ******************************************************************************/
 
 #ifndef SIMULATION_H

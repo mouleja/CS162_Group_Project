@@ -1,3 +1,11 @@
+/******************************************************************************
+** Program name: Critter.h
+** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Assignment: Group Project  -  CS162-400-W19
+** Date: 2/8/19
+** Description: Parent Abstract class representing simulated insects
+******************************************************************************/
+
 #ifndef CRITTER_H
 #define CRITTER_H
 
@@ -7,13 +15,12 @@ public:
 	enum Type { Ant, Doodlebug };
 
 protected:
-	bool moved;
-	bool canBreed;
-	int row;
-	int col;
-	int rowSize;
-	int colSize;
-	int age;
+	bool moved;		// Has critter moved this turn
+	int row;		// Current row position on board
+	int col;		// Current column position on board
+	int rowSize;	// Number of rows on board
+	int colSize;	// Number of coloumns on board
+	int lastBred;	// Steps since critter last gave birth
 
 public:
 	Critter(int row, int col, int rowSize, int colSize)
@@ -23,24 +30,20 @@ public:
 		this->rowSize = rowSize;
 		this->colSize = colSize;
 		this->moved = false;
-		this->age = 0;
-		this->canBreed = false;
+		this->lastBred = 0;
 	}
-	// Getters
-	int getAge() { return this->age; }
-	bool getCanBreed() { return this->canBreed; }
 
-	// Setters
-	void setAge(int age) { this->age = age; }
-	void setCanBreed(bool canBreed) { this->canBreed = canBreed; }
+	// Setters and Getters
+	void setMoved(bool moved); 
+	bool hasMoved();
 
-	// Functions
-	void setMoved(bool moved) { this->moved = moved; }
-	bool hasMoved() { return moved; }
+	// Virtual methods
+	virtual bool Starve();
+
 	virtual Type GetType() = 0;
 	virtual void Move(Critter*** &board) = 0;
 	virtual bool Breed(Critter*** &board) = 0;
-	virtual bool Starve() { return false; }
+
 	virtual ~Critter() {}
 };
 

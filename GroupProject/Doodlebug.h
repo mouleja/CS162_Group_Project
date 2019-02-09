@@ -1,3 +1,11 @@
+/******************************************************************************
+** Program name: Doodlebug.h
+** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Assignment: Group Project  -  CS162-400-W19
+** Date: 2/8/19
+** Description: Class representing simulated doodlebugs (Child of Critter)
+******************************************************************************/
+
 #ifndef DOODLEBUG_H
 #define DOODLEBUG_H
 
@@ -7,15 +15,19 @@ class Doodlebug :
 	public Critter
 {
 private:
-	int fed;
+	int fed;	// Turns since last feeding
 public:
 	Doodlebug(int row, int col, int rowSize, int colSize);
 	~Doodlebug();
+
+	Type GetType();
+
 	void Move(Critter*** &board);
 	bool Breed(Critter*** &board);
 	bool Starve();
-	Type GetType();
+
 	bool validSpace(int nextRow, int nextCol);
+	bool hasEmpty(int row, int col, Critter ***& board);
 };
 
 #endif

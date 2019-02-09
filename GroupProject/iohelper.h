@@ -1,5 +1,5 @@
 /******************************************************************************
-** Program name: iohelper.hpp
+** Program name: iohelper.h
 ** Author: Jason Moule
 ** Assignment: Project 1 -  CS162-400-W19
 ** Date: 1/13/19

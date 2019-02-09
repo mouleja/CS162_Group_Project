@@ -1,3 +1,11 @@
+/******************************************************************************
+** Program name: Doodlebug.cpp
+** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Assignment: Group Project  -  CS162-400-W19
+** Date: 2/8/19
+** Description: Class representing simulated ant (Child of Critter)
+******************************************************************************/
+
 #ifndef ANT_H
 #define ANT_H
 
@@ -9,21 +17,19 @@ enum direction {UP, DOWN, LEFT, RIGHT};
 class Ant :
 	public Critter
 {
-private:
-	int stepNum;
-
 public:
 	Ant(int row, int col, int rowSize, int colSize);
 	~Ant();
 
 	// Getters
-
-	// Setters
+	Type GetType();
 
 	// Functions
 	void Move(Critter*** &board);
 	bool Breed(Critter*** &board);
-	Type GetType();
+
+	bool hasEmpty(int row, int col, Critter ***& board);
+	bool validSpace(int nextRow, int nextCol);
 };
 
 #endif
