@@ -14,7 +14,7 @@
 
 Doodlebug::Doodlebug(int row, int col, int rowSize, int colSize) : Critter(row, col, rowSize, colSize)
 {
-	fed = 3;	// Because fed gets decremented in Move which comes before starve
+	fed = 3;	// Days left before starving
 }
 
 Doodlebug::~Doodlebug()
@@ -230,7 +230,7 @@ bool Doodlebug::Breed(Critter*** &board)
 bool Doodlebug::Starve()
 {
 	bool starved = false;
-	if (fed == 0)
+	if (fed < 0)
 	{
 		starved = true; //change doodlebug's current space to empty
 	}
