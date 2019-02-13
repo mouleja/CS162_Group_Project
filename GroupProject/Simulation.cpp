@@ -274,9 +274,7 @@ void Simulation::printBoard()
 
 /***********************************************************************************************
 *						randomPlacing()
-* This function randomly  places the ants and doodlebugs on the board grid. It takes in as args the
-* board by reference, the rows and columns of the board's dimension, the total number of ants to
-* be placed and the total number of doodlebugs to be placed.
+* This function randomly  places the ants and doodlebugs on the board grid.
 ************************************************************************************************/
 void Simulation::randomPlacing()
 {
