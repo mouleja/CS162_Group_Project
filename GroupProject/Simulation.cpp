@@ -11,7 +11,6 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "extracredit.hpp"
 #include "Simulation.h"
 #include "iohelper.h"
 
@@ -63,7 +62,7 @@ void Simulation::Run()
 
 	int ants = startingAnts;
 	int bugs = startingBugs;
-	randomPlacing(board, rows, cols, startingAnts, startingBugs);
+	randomPlacing();
 	
 	/*
 	// Populate board with predefined board for now (REPLACE WITH RANDOM)
@@ -272,6 +271,75 @@ void Simulation::printBoard()
 	}
 	printString();
 }
+
+/***********************************************************************************************
+*						randomPlacing()
+* This function randomly  places the ants and doodlebugs on the board grid. It takes in as args the
+* board by reference, the rows and columns of the board's dimension, the total number of ants to
+* be placed and the total number of doodlebugs to be placed.
+************************************************************************************************/
+void Simulation::randomPlacing()
+{
+	int totalSpaces = rows * cols;
+	int* spaces = new int[totalSpaces];
+	int ants = startingAnts;
+	int dbugs = startingBugs;
+	int totalBugs = ants + dbugs;
+	int randIndex;
+	int randSpace;
+	int randRow;
+	int randCol;
+	int nullSpace;
+	int nullRow;
+	int nullCol;
+	//set up an array containing values [0, rows*cols] that represents available spaces
+	//on the board for a bug to be placed in.
+	for (int i = 0; i < totalSpaces; i++)
+	{
+		spaces[i] = i;
+	}
+
+	for (int j = 0; j < totalBugs; j++)
+	{
+		randIndex = rand() % totalSpaces; //the random index that will give the random space in spaces[]
+		randSpace = spaces[randIndex]; //the random space's value in row*col format.
+		randRow = randSpace / cols; //calc the row of the random space
+		randCol = randSpace % cols; //calc the column of the random space
+		//populate board with ants first
+		if (ants)
+		{
+			board[randRow][randCol] = new Ant(randRow, randCol, rows, cols);
+			ants--;
+		}
+		//then populate board with doodlebugs
+		else if (dbugs)
+		{
+			board[randRow][randCol] = new Doodlebug(randRow, randCol, rows, cols);
+			dbugs--;
+		}
+		//remove the random space just used from the array of viable spaces
+		for (int i = randIndex; i < totalSpaces - 1; i++)
+		{
+			spaces[i] = spaces[i + 1];
+		}
+
+		totalSpaces--; //decrement number of viable spaces
+
+	}//end for
+
+	//not sure if following is redundant:
+	//set remaining spaces not occupied by bugs to null pointers
+	for (int i = 0; i < totalSpaces; i++)
+	{
+		nullSpace = spaces[i];
+		nullRow = nullSpace / cols;
+		nullCol = nullSpace % cols;
+		board[nullRow][nullCol] = nullptr;
+	}
+
+	delete[] spaces;
+
+}//end randomPlacing
 
 int main()
 {

@@ -50,6 +50,8 @@ private:
 
 	void printBoard();
 
+	void randomPlacing();
+
 public:
 	Simulation();
 	Simulation(int rows, int cols, int startingAnts, int startingBugs);

@@ -33,9 +33,6 @@
     <ClInclude Include="randNum.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="extracredit.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Ant.cpp">
@@ -54,9 +51,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Critter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="extracredit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
