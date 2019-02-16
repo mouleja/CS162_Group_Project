@@ -1,6 +1,6 @@
 /******************************************************************************
 ** Program name: Critter.h
-** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Author: Group8- Thomas Armstrong, Yidong Lin, Jason Moule, Chetan Prasad, Tim Withers
 ** Assignment: Group Project  -  CS162-400-W19
 ** Date: 2/8/19
 ** Description: Parent Abstract class representing simulated insects

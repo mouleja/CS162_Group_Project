@@ -1,10 +1,11 @@
 /******************************************************************************
 ** Program name: Game.hpp
-** Author: Group8 :
+** Author: Group8- Thomas Armstrong, Yidong Lin, Jason Moule, Chetan Prasad, Tim Withers
 ** Assignment: Group Project  -  CS162-400-W19
-** Date: 2/2/19
+** Date: 2/16/19
 ** Description: 2D Predator-Prey simulation program
 **	Ants(prey) and Doodlebugs(predators) move, breed and starve in a 2D grid
+** INCLUDES MAIN PROGRAM (at bottom)
 ******************************************************************************/
 
 #include <ctime>
@@ -13,20 +14,6 @@
 
 #include "Simulation.h"
 #include "iohelper.h"
-
-// Default constructor
-Simulation::Simulation() : 
-	rows(DEFAULT_ROWS),		
-	cols (DEFAULT_COLS), 
-	startingAnts(DEFAULT_ANTS),
-	startingBugs(DEFAULT_BUGS)
-{
-	board = new Critter**[rows];
-	for (int i = 0; i < rows; i++)
-	{
-		board[i] = new Critter*[cols];
-	}
-}
 
 // Custom simulation constructor
 Simulation::Simulation(int rows, int cols, int startingAnts, int startingBugs) :
@@ -58,94 +45,86 @@ Simulation::~Simulation()
 // Main program loop
 void Simulation::Run()
 {
-	printString("\nWelcome to the Predator-Prey Simulation Program by <NAMES>!\n");
-
 	int ants = startingAnts;
 	int bugs = startingBugs;
-	randomPlacing();
-	
-	/*
-	// Populate board with predefined board for now (REPLACE WITH RANDOM)
-	vector< vector<int> > sampleBoard {
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0},
-	{0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1},
-	{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} };
 
-	
-
+	// initial an empty board
 	for (int r = 0; r < rows; r++)
 	{
 		for (int c = 0; c < cols; c++)
 		{
-			if (sampleBoard[r][c] == 1)
-			{
-				board[r][c] = new Ant(r, c, rows, cols);
-				ants++;
-			}
-			else if (sampleBoard[r][c] == 2)
-			{
-				board[r][c] = new Doodlebug(r, c, rows, cols);
-				bugs++;
-			}
-			else
-			{
-				board[r][c] = nullptr;
-			}
+			board[r][c] = nullptr;
 		}
 	}
-	*/
+
+	// random place ants
+	while (ants != 0)
+	{
+		int r = getRandInt(0, rows - 1);
+		int c = getRandInt(0, cols - 1);
+
+		if (board[r][c] == nullptr)
+		{
+			board[r][c] = new Ant(r, c, rows, cols);
+		}
+		else
+		{
+			continue;
+		}
+		ants--;
+	}
+
+	// random place bugs
+	while (bugs != 0)
+	{
+		int r = getRandInt(0, rows - 1);
+		int c = getRandInt(0, cols - 1);
+
+		if (board[r][c] == nullptr)
+		{
+			board[r][c] = new Doodlebug(r, c, rows, cols);
+		}
+		else
+		{
+			continue;
+		}
+		bugs--;
+	}
 
 	bool endSimulation = false;
 	int currentTurn = 0, turns = 0;
 
-		printBoard();		// print board to console
-		std::cout << "Starting Board: Ants - " << ants << ", Doodlebugs- " << bugs << std::endl;
+	printBoard();		// print board to console
+	std::cout << "Starting Board: Ants - " << startingAnts << ", Doodlebugs- " << startingBugs << std::endl;
 
-	while (!endSimulation)
+	while (!endSimulation)	// loop until user quits
 	{
 		turns += getInt("\nHow many turns do you want to simulate?:");
 
-		while (currentTurn < turns)
+		while (currentTurn < turns)		// go thru board and do actions
 		{
 			printString();
 
-			// go thru board and do actions
-			// doodlebugs moved first
-			bugs = makeMoves(Critter::Type::Doodlebug);
+			bugs = makeMoves(Critter::Type::Doodlebug);	// doodlebugs move first
 			ants = makeMoves(Critter::Type::Ant);
-			resetMoved();		// reset moved bool for next turn
+			resetMoved();								// reset moved bool for next turn
 
-			bugs += breed(Critter::Type::Doodlebug);
+			bugs += breed(Critter::Type::Doodlebug);	// check for breeding & add critters if so
 			ants += breed(Critter::Type::Ant);
 
-			bugs -= starve();
+			bugs -= starve();							// check for starvation in bugs
 
-			printBoard();		// print board to console
+			printBoard();								// print board to console
+
 			currentTurn++;
 			std::cout<< "Turn: " << currentTurn << ", Ants - " 
 				<< ants << ", Doodlebugs - " << bugs << std::endl;
 		}
 
-		char doMoreTurns[] = { 'y', 'n' };
+		char doMoreTurns[] = { 'y', 'n' };	
 		char more = getChar("\nSimulate more turns? (y/n):", doMoreTurns, 2);
-		if (more == 'n')
+
+		if (more == 'n')								// Do more loops?
 		{
 			endSimulation = true;
 		}
@@ -205,8 +184,6 @@ int Simulation::starve()
 				{
 					delete board[r][c];
 					board[r][c] = nullptr;
-					printString("Doodlebug starves at " + std::to_string(r) + " : " +
-						std::to_string(c));
 					++total;
 				}//end if starve
 			}
@@ -246,7 +223,7 @@ void Simulation::printBoard()
 		{
 			if (!board[r][c])
 			{
-				printString("-", false);
+				printString(" ", false);
 			}
 			else if (board[r][c]->GetType() == Critter::Type::Ant)
 			{
@@ -258,7 +235,7 @@ void Simulation::printBoard()
 			}
 			else
 			{
-				printString("!", false);
+				printString("!", false);	// Debugging catcher
 			}
 		}
 
@@ -272,78 +249,34 @@ void Simulation::printBoard()
 	printString();
 }
 
-/***********************************************************************************************
-*						randomPlacing()
-* This function randomly  places the ants and doodlebugs on the board grid.
-************************************************************************************************/
-void Simulation::randomPlacing()
-{
-	int totalSpaces = rows * cols;
-	int* spaces = new int[totalSpaces];
-	int ants = startingAnts;
-	int dbugs = startingBugs;
-	int totalBugs = ants + dbugs;
-	int randIndex;
-	int randSpace;
-	int randRow;
-	int randCol;
-	int nullSpace;
-	int nullRow;
-	int nullCol;
-	//set up an array containing values [0, rows*cols] that represents available spaces
-	//on the board for a bug to be placed in.
-	for (int i = 0; i < totalSpaces; i++)
-	{
-		spaces[i] = i;
-	}
-
-	for (int j = 0; j < totalBugs; j++)
-	{
-		randIndex = rand() % totalSpaces; //the random index that will give the random space in spaces[]
-		randSpace = spaces[randIndex]; //the random space's value in row*col format.
-		randRow = randSpace / cols; //calc the row of the random space
-		randCol = randSpace % cols; //calc the column of the random space
-		//populate board with ants first
-		if (ants)
-		{
-			board[randRow][randCol] = new Ant(randRow, randCol, rows, cols);
-			ants--;
-		}
-		//then populate board with doodlebugs
-		else if (dbugs)
-		{
-			board[randRow][randCol] = new Doodlebug(randRow, randCol, rows, cols);
-			dbugs--;
-		}
-		//remove the random space just used from the array of viable spaces
-		for (int i = randIndex; i < totalSpaces - 1; i++)
-		{
-			spaces[i] = spaces[i + 1];
-		}
-
-		totalSpaces--; //decrement number of viable spaces
-
-	}//end for
-
-	//not sure if following is redundant:
-	//set remaining spaces not occupied by bugs to null pointers
-	for (int i = 0; i < totalSpaces; i++)
-	{
-		nullSpace = spaces[i];
-		nullRow = nullSpace / cols;
-		nullCol = nullSpace % cols;
-		board[nullRow][nullCol] = nullptr;
-	}
-
-	delete[] spaces;
-
-}//end randomPlacing
-
 int main()
 {
 	srand(static_cast<unsigned int>(time(NULL)));	// Seed Rand()
 
-	Simulation* simulation = new Simulation();
+	printString("\nWelcome to the Predator-Prey Simulation Program");
+	printString("by Thomas Armstrong, Yidong Lin, Jason Moule, Chetan Prasad, Tim Withers!\n");
+
+	printString("\nWe did the Extra Credit!\n");
+
+	int rows = 20, cols = 20, antNumber = 100, bugNumber = 5;
+	printString("The default simulation runs with 100 ants and 5 doodlebugs on a 20 x 20 board.");
+
+	char yesNo[] = { 'y', 'n' };
+	char customInput = getChar("Would you like to run a custom simulation instead?", yesNo, 2);
+
+	if (customInput == 'y')
+	{
+		rows = getInt(2, 100, "\nPlease input the number of rows [2, 100] on the board:");
+		cols = getInt(2, 100, "Please input the number of columns [2, 100] on the board:");
+		int maxAnts = (rows * cols) - 1;
+		antNumber = getInt(1, maxAnts, "Please input the number of initial ants:");
+		int maxBugs = (rows * cols) - antNumber;
+		bugNumber = getInt(1, maxBugs, "Please input the number of intital doodlebugs:");
+	}
+
+	Simulation* simulation = new Simulation(rows, cols, antNumber, bugNumber);
 	simulation->Run();
 	delete simulation;
+
+	printString("\nThank you and good day!\n");
 }

@@ -1,6 +1,6 @@
 /******************************************************************************
 ** Program name: Simulation.hpp
-** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Author: Group8- Thomas Armstrong, Yidong Lin, Jason Moule, Chetan Prasad, Tim Withers
 ** Assignment: Group Project  -  CS162-400-W19
 ** Date: 2/2/19
 ** Description: Parent Abstract class representing simulated insects
@@ -9,20 +9,11 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-#include <vector>
-using std::vector;
-
 #include <string>
 using std::string;
 
 #include "Ant.h"
 #include "Doodlebug.h"
-
-// Globals
-#define DEFAULT_ROWS 20
-#define DEFAULT_COLS 20
-#define DEFAULT_ANTS 100
-#define DEFAULT_BUGS 5
 
 class Simulation
 {
@@ -50,10 +41,7 @@ private:
 
 	void printBoard();
 
-	void randomPlacing();
-
 public:
-	Simulation();
 	Simulation(int rows, int cols, int startingAnts, int startingBugs);
 	~Simulation();
 

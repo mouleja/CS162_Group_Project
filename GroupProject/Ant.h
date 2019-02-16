@@ -1,6 +1,6 @@
 /******************************************************************************
-** Program name: Doodlebug.cpp
-** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Program name: Ant.h
+** Author: Group8- Thomas Armstrong, Yidong Lin, Jason Moule, Chetan Prasad, Tim Withers
 ** Assignment: Group Project  -  CS162-400-W19
 ** Date: 2/8/19
 ** Description: Class representing simulated ant (Child of Critter)

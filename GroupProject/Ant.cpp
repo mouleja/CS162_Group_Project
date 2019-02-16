@@ -1,16 +1,12 @@
 /******************************************************************************
-** Program name: Doodlebug.cpp
-** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Program name: Ant.cpp
+** Author: Group8- Thomas Armstrong, Yidong Lin, Jason Moule, Chetan Prasad, Tim Withers
 ** Assignment: Group Project  -  CS162-400-W19
 ** Date: 2/8/19
 ** Description: Class representing simulated ant (Child of Critter)
 ******************************************************************************/
 
 #include "Ant.h"
-
-#include <iostream>
-using std::cout;
-using std::endl;
 
 Ant::Ant(int row, int col, int rowSize, int colSize) : Critter(row, col, rowSize, colSize)
 {
@@ -28,27 +24,6 @@ void Ant::Move(Critter*** &board)
 	// Get random number for moving up, down, left, or right
 	// UP = 0, DOWN, = 1, LEFT = 2, RIGHT = 3
 	int randDir = getRandInt(0, 3);
-
-	/*
-	// Printing out for debugging. TODO: Remove this or comment out.
-	switch (randDir) {
-		case UP:
-			cout << "Move UP" << endl;
-			break;
-		case DOWN:
-			cout << "Move DOWN" << endl;
-			break;
-		case LEFT:
-			cout << "Move LEFT" << endl;
-			break;
-		case RIGHT:
-			cout << "Move RIGHT" << endl;
-			break;
-		default:
-			break;
-	}*/
-
-	// randDir = 3; TODO: For debug, delete this
 
 	// Try and move ant with particular random direction
 	if (randDir == UP) {
@@ -84,8 +59,6 @@ void Ant::Move(Critter*** &board)
 	// Update new calculated position with ant
 	board[row][col] = this;
 
-	//cout << "New position: [" << row << "][" << col << "]" << endl; TODO: For debug, delete this
-
 	// Finish move
 	moved = true;			// So they can't move again if they moved right or down
 	this->lastBred += 1;	// Age one step
@@ -101,8 +74,7 @@ bool Ant::Breed(Critter*** &board)
 		while (breed == false) {
 
 			// Get random number for moving up, down, left, or right
-			// UP = 0, DOWN, = 1, LEFT = 2, RIGHT = 3
-			int randDir = getRandInt(0, 3);
+			int randDir = getRandInt(0, 3);	// UP = 0, DOWN, = 1, LEFT = 2, RIGHT = 3
 
 			// Check if a random spot is empty
 			if (randDir == 0) {	// UP
@@ -110,7 +82,6 @@ bool Ant::Breed(Critter*** &board)
 					if (board[row - 1][col] == nullptr) {
 						board[row - 1][col] = new Ant(row - 1, col, rowSize, colSize);
 						breed = true;
-						std::cout << "New Ant born at " << row - 1 << " : " << col << std::endl;
 					}
 				}
 			}
@@ -119,7 +90,6 @@ bool Ant::Breed(Critter*** &board)
 					if (board[row + 1][col] == nullptr) {
 						board[row + 1][col] = new Ant(row + 1, col, rowSize, colSize);
 						breed = true;
-						std::cout << "New Ant born at " << row + 1 << " : " << col << std::endl;
 					}
 				}
 			}
@@ -128,7 +98,6 @@ bool Ant::Breed(Critter*** &board)
 					if (board[row][col - 1] == nullptr) {
 						board[row][col - 1] = new Ant(row, col - 1, rowSize, colSize);
 						breed = true;
-						std::cout << "New Ant born at " << row << " : " << col - 1 << std::endl;
 					}
 				}
 			}
@@ -137,7 +106,6 @@ bool Ant::Breed(Critter*** &board)
 					if (board[row][col + 1] == nullptr) {
 						board[row][col + 1] = new Ant(row, col + 1, rowSize, colSize);
 						breed = true;
-						std::cout << "New Ant born at " << row << " : " << col + 1 << std::endl;
 					}
 				}
 			}

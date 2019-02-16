@@ -1,13 +1,12 @@
 /******************************************************************************
 ** Program name: Doodlebug.cpp
-** Authors: (Group 8) Thomas Armstrong, Jason Moule, Chetan Prasad,Timothy Withers
+** Author: Group8- Thomas Armstrong, Yidong Lin, Jason Moule, Chetan Prasad, Tim Withers
 ** Assignment: Group Project  -  CS162-400-W19
 ** Date: 2/8/19
 ** Description: Class representing simulated doodlebugs (Child of Critter)
 ******************************************************************************/
 
 #include <cstdlib>
-#include <iostream>	// FOR DE'BUG'GING (Get it?)
 
 #include "Doodlebug.h"
 #include "randNum.hpp"
@@ -126,7 +125,6 @@ void Doodlebug::Move(Critter*** &board)
 		row = nextRow; //update row
 		col = nextCol; //update col
 		board[row][col] = this; //move to space ant occuppied.
-		std::cout << "Doodlebug eats ant at " << row << " : " << col << std::endl; // DEBUG
 		fed = 3; //update fed status of doodlebug 
 	}
 	//if there aren't any ants but there are empty adjacent spaces to move into
@@ -185,7 +183,6 @@ bool Doodlebug::Breed(Critter*** &board)
 					if (board[row - 1][col] == nullptr) {
 						board[row - 1][col] = new Doodlebug(row - 1, col, rowSize, colSize);
 						breed = true;
-						std::cout << "New Doodlebug born at " << row - 1 << " : " << col << std::endl;
 					}
 				}
 			}
@@ -194,7 +191,6 @@ bool Doodlebug::Breed(Critter*** &board)
 					if (board[row + 1][col] == nullptr) {
 						board[row + 1][col] = new Doodlebug(row + 1, col, rowSize, colSize);
 						breed = true;
-						std::cout << "New Doodlebug born at " << row + 1 << " : " << col << std::endl;
 					}
 				}
 			}
@@ -203,7 +199,6 @@ bool Doodlebug::Breed(Critter*** &board)
 					if (board[row][col - 1] == nullptr) {
 						board[row][col - 1] = new Doodlebug(row, col - 1, rowSize, colSize);
 						breed = true;
-						std::cout << "New Doodlebug born at " << row << " : " << col - 1 << std::endl;
 					}
 				}
 			}
@@ -212,7 +207,6 @@ bool Doodlebug::Breed(Critter*** &board)
 					if (board[row][col + 1] == nullptr) {
 						board[row][col + 1] = new Doodlebug(row, col + 1, rowSize, colSize);
 						breed = true;
-						std::cout << "New Doodlebug born at " << row << " : " << col + 1 << std::endl;
 					}
 				}
 			}
