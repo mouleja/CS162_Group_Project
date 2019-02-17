@@ -171,7 +171,7 @@ char getChar(string prompt)
 		if (cin.fail())	// Non numeric input
 		{
 			cin.clear();			// Clear error state
-			cout << "Please enter valid character (???): ";
+			cout << "Please enter valid character: ";
 		}
 		// Catch input that is longer than one char
 		else if (cin.peek() != '\n')
@@ -235,4 +235,5 @@ double getDouble(double min, double max, string prompt)
 		// Ignore rest of input buffer
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
+	return -999.99;	// Debug return (should never get here)
 }
